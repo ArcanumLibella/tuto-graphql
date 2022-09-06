@@ -14,3 +14,10 @@ type Query {
   users: [User!]! #Pour récuperer un tableau d'users, le premier ! indique que l'on veut au moins 1 user et le second indique qu'il faudra renvoyer une erreur dans le cas contraire
   user(id: ID!): User!
 }
+
+# MUTATION
+
+type Mutation {
+  createUser(id: ID!, name: String!, race: String, age: Int): User!
+  deleteUser(id: ID!): Boolean
+}

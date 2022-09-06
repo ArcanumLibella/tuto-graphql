@@ -44,6 +44,27 @@ const resolvers = {
       // Il est aussi possible de déstructurer args et de n'indiquer que le param souhaité : { id }
       return users.find(user => user.id == args.id)
     }
+  },
+  Mutation: {
+    createUser: (parent, {id, name, race, age}) => {
+      let checkId = users.findIndex(user => user.id == id)
+      if (checkId == -1) {
+        let newUser = { id, name, race, age }
+        users.push(newUser)
+        return newUser;
+      } else {
+        throw new Error('ID already taken')
+      }
+    },
+    deleteUser: (parent, { id }) => {
+      let checkId = users.findIndex(user => user.id == id)
+      if (checkId !== -1) {
+        users.splice(checkId, 1)
+        return true;
+      } else {
+        throw new Error('Unknowed ID')
+      }
+    }
   }
 }
 

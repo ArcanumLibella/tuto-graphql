@@ -442,6 +442,41 @@ const resolvers = {
       // Il est aussi possible de déstructurer args et de n'indiquer que le param souhaité : { id }
       return users.find(user => user.id == args.id);
     }
+  },
+  Mutation: {
+    createUser: (parent, {
+      id,
+      name,
+      race,
+      age
+    }) => {
+      let checkId = users.findIndex(user => user.id == id);
+
+      if (checkId == -1) {
+        let newUser = {
+          id,
+          name,
+          race,
+          age
+        };
+        users.push(newUser);
+        return newUser;
+      } else {
+        throw new Error('ID already taken');
+      }
+    },
+    deleteUser: (parent, {
+      id
+    }) => {
+      let checkId = users.findIndex(user => user.id == id);
+
+      if (checkId !== -1) {
+        users.splice(checkId, 1);
+        return true;
+      } else {
+        throw new Error('Unknowed ID');
+      }
+    }
   }
 }; // On exporte le resolver pour pouvoir l'utiliser
 
@@ -457,8 +492,8 @@ const resolvers = {
 /***/ (function(module, exports) {
 
 
-    var doc = {"kind":"Document","definitions":[{"kind":"ObjectTypeDefinition","name":{"kind":"Name","value":"User"},"interfaces":[],"directives":[],"fields":[{"kind":"FieldDefinition","name":{"kind":"Name","value":"id"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"name"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"race"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"age"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]}]},{"kind":"ObjectTypeDefinition","name":{"kind":"Name","value":"Query"},"interfaces":[],"directives":[],"fields":[{"kind":"FieldDefinition","name":{"kind":"Name","value":"hello"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"users"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"User"}}}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"InputValueDefinition","name":{"kind":"Name","value":"id"},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"User"}}},"directives":[]}]}],"loc":{"start":0,"end":400}};
-    doc.loc.source = {"body":"# Contient tous les types d'objets dont le type Query qui est particulier\n\n# CUSTOM TYPES\ntype User {\n  id: ID!\n  name: String!\n  race: String\n  age: Int\n}\n\n# QUERY\ntype Query {\n  hello: String\n  users: [User!]! #Pour récuperer un tableau d'users, le premier ! indique que l'on veut au moins 1 user et le second indique qu'il faudra renvoyer une erreur dans le cas contraire\n  user(id: ID!): User!\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
+    var doc = {"kind":"Document","definitions":[{"kind":"ObjectTypeDefinition","name":{"kind":"Name","value":"User"},"interfaces":[],"directives":[],"fields":[{"kind":"FieldDefinition","name":{"kind":"Name","value":"id"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"name"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"race"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"age"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]}]},{"kind":"ObjectTypeDefinition","name":{"kind":"Name","value":"Query"},"interfaces":[],"directives":[],"fields":[{"kind":"FieldDefinition","name":{"kind":"Name","value":"hello"},"arguments":[],"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"users"},"arguments":[],"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"User"}}}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"InputValueDefinition","name":{"kind":"Name","value":"id"},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"User"}}},"directives":[]}]},{"kind":"ObjectTypeDefinition","name":{"kind":"Name","value":"Mutation"},"interfaces":[],"directives":[],"fields":[{"kind":"FieldDefinition","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"InputValueDefinition","name":{"kind":"Name","value":"id"},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"InputValueDefinition","name":{"kind":"Name","value":"name"},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"InputValueDefinition","name":{"kind":"Name","value":"race"},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"InputValueDefinition","name":{"kind":"Name","value":"age"},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]}],"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"User"}}},"directives":[]},{"kind":"FieldDefinition","name":{"kind":"Name","value":"deleteUser"},"arguments":[{"kind":"InputValueDefinition","name":{"kind":"Name","value":"id"},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}},"directives":[]}]}],"loc":{"start":0,"end":530}};
+    doc.loc.source = {"body":"# Contient tous les types d'objets dont le type Query qui est particulier\n\n# CUSTOM TYPES\ntype User {\n  id: ID!\n  name: String!\n  race: String\n  age: Int\n}\n\n# QUERY\ntype Query {\n  hello: String\n  users: [User!]! #Pour récuperer un tableau d'users, le premier ! indique que l'on veut au moins 1 user et le second indique qu'il faudra renvoyer une erreur dans le cas contraire\n  user(id: ID!): User!\n}\n\n# MUTATION\n\ntype Mutation {\n  createUser(id: ID!, name: String!, race: String, age: Int): User!\n  deleteUser(id: ID!): Boolean\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
   
 
     var names = {};
